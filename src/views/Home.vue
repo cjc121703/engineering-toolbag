@@ -52,11 +52,26 @@
                     </v-flex>
                     <v-flex xs1>
                     </v-flex>
-                    <v-flex xs3>
-                        <v-btn v-on:click="submitStartPosition()">Submit</v-btn>
+                    <v-flex xs1>
+                        <v-btn 
+                            v-on:click="submitStartPosition()"
+                            flat
+                            icon
+                            color = "green"
+                            >
+                                <v-icon>check_circle_outline</v-icon>
+                            </v-btn>
                     </v-flex>
-                    <v-flex xs3>
-                        <v-btn v-if="startPointSumbitted" v-on:click="clearStartPosition()">X</v-btn>                        
+                    <v-flex xs1>
+                        <v-btn 
+                            v-if="startPointSumbitted" 
+                            v-on:click="clearStartPosition()"
+                            flat
+                            icon
+                            color="red"
+                            >
+                                <v-icon>highlight_off</v-icon>
+                            </v-btn>                        
                     </v-flex>
                 </v-layout>
                 <DrawLinesOnAPicture 
