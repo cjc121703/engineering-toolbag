@@ -7,8 +7,14 @@
                         width:imageWidth,
                         height:imageHeight
                     }"/>
-                <v-line :config="configLine"></v-line>
-                <v-rect :config="configPoint"></v-rect>
+                <div
+                    v-for="(line, index) in lines"
+                    :key="index"
+                >
+                    <v-rect :config="line"></v-rect>
+                </div>
+                
+
             </v-layer>
         </v-stage>
     </div>
@@ -20,16 +26,17 @@ export default {
         'imageSrc',
         'imageHeight',
         'imageWidth',
-        'configPoint'
+        'configPoint',
+        'lines'
     ],
     data () {
         return{
             image: null,
             configKonva: null,
             configLine: {
-                x: 0    ,
-                y: 300,
-                points: [0, 0, 300, 40, 25, 25],
+                x: 0,
+                y: 0,
+                points: [0,0,500,500],
                 stroke: 'black'
             }
         }
