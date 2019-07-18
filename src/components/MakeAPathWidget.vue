@@ -60,11 +60,14 @@
                 <input
                     type="number"
                     min="0"
+                    v-model="nextX"
                 >
                 <label>Next Y</label>
                 <input
                     type="number"
                     min="0"
+                    v-model="nextY"
+
                 >
                 <v-btn 
                     v-on:click="addLines()"
@@ -81,6 +84,7 @@
             :imageHeight="fieldHeight" 
             :imageWidth="fieldWidth"
             :configPoint="configPoint"
+            :lines="lines"
         >
         </DrawLinesOnAPicture>
     </v-card>
@@ -108,7 +112,9 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
                 height: 10,
                 fill: "red"
           },
-          lines: []
+          lines: [],
+          nextX: 0,
+          nextY:  0
 
       }
     },
@@ -127,18 +133,19 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
             this.startPointSubmitted = false ;  
         },
         addLines : function(){
-            if(lines.length === 0){
+            var lineXStart = 0;
+            var lineYStart = 0;
+            if(this.lines.length === 0){
                 lineXStart = this.startX,
                 lineYStart = this.startY
             }
             this.lines.push(
-                {
-                    x: 0,
-                    y: 0,
-                    points: [lineXStart, lineYStart],
-                    stroke: 'black'
-                }
-            )
+            {
+                x: 0,
+                y: 0,
+                points: [lineXStart,lineYStart,this.nextX, this.nextY],
+                stroke: 'black'
+            })
         }
     },
     created() {

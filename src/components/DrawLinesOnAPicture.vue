@@ -7,11 +7,12 @@
                         width:imageWidth,
                         height:imageHeight
                     }"/>
+                <v-rect :config="configPoint"></v-rect>
                 <div
                     v-for="(line, index) in lines"
                     :key="index"
                 >
-                    <v-rect :config="line"></v-rect>
+                    <v-line :config="line"></v-line>
                 </div>
                 
 
