@@ -83,6 +83,37 @@
                     v-model="nextY"
 
                 >
+                <v-btn
+                    v-if="!curveIt"
+                    flat
+                    icon
+                    color="blue"
+                    v-on:click="curveIt = true"
+                >
+                    <v-icon>redo</v-icon>
+                </v-btn>
+                <label
+                    v-if="curveIt"
+                >
+                Curve X
+                </label>
+                <input
+                    v-if="curveIt"
+                    type="number"
+                    min=0
+                    v-model="curveX"
+                >
+                                <label
+                    v-if="curveIt"
+                >
+                Curve Y
+                </label>
+                <input
+                    v-if="curveIt"
+                    type="number"
+                    min=0
+                    v-model="curveY"
+                >
                 <v-btn 
                     v-on:click="addLines()"
                     flat
@@ -99,6 +130,7 @@
             :imageWidth="fieldWidth"
             :points="points"
             :lines="lines"
+            :curves="curves"
         >
         </DrawLinesOnAPicture>
     </v-card>
@@ -122,8 +154,12 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
           startingPoint:null,
           points: [],
           lines: [],
+          curves: [],
           nextX: 0,
-          nextY:  0
+          nextY:  0,
+          curveX: 0,
+          curveY: 0,
+          curveIt: false
 
       }
     },
@@ -147,21 +183,40 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
         addLines : function(){
             var lineXStart = 0;
             var lineYStart = 0;
-            if(this.lines.length === 0){
-                lineXStart = this.startX,
-                lineYStart = this.startY
+            if(this.lines.length === 0 && this.curves.length === 0){
+                lineXStart = parseInt(this.startX),
+                lineYStart = parseInt(this.startY)
             }
             else{
                 lineXStart = this.points[this.points.length - 1].x ;
                 lineYStart = this.points[this.points.length - 1].y ;
             }
-            this.lines.push(
-            {
-                x: 0,
-                y: 0,
-                points: [lineXStart,lineYStart,this.nextX, this.nextY],
-                stroke: 'black'
-            });
+            if(this.curveIt){
+                this.curves.push({
+                    startX: lineXStart,
+                    startY: lineYStart,
+                    curvePointX: parseInt(this.curveX),
+                    curvePointY: parseInt(this.curveY),
+                    endX: parseInt(this.nextX),
+                    endY: parseInt(this.nextY)
+                });
+                this.points.push({
+                    x: parseInt(this.curveX),
+                    y: parseInt(this.curveY),
+                    width: 10,
+                    height: 10,
+                    fill: "purple"
+                })
+            }
+            else{
+                this.lines.push(
+                {
+                    x: 0,
+                    y: 0,
+                    points: [lineXStart,lineYStart,this.nextX, this.nextY],
+                    stroke: 'black'
+                });
+            }
             this.points.push({
                 x: this.nextX,
                 y: this.nextY,
@@ -169,6 +224,7 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
                 height: 10,
                 fill: "red"
             })
+            this.curveIt = false;            
         }
     },
     created() {

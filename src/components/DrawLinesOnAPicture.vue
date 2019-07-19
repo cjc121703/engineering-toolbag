@@ -19,13 +19,23 @@
                 >
                     <v-line :config="line"></v-line>
                 </div>
-                
-
+                <div
+                    v-for="(curve, index) in curves"
+                    :key="index"
+                >
+                    <quad-curve
+                        :curve = curve
+                    >
+                        curve.startX
+                    </quad-curve>
+                </div>
             </v-layer>
         </v-stage>
     </div>
 </template>
 <script>
+import QuadCurve from "@/components/QuadraticCurve";
+
 export default {
     name: 'DrawLinesOnAPicture',
     props: [
@@ -33,8 +43,12 @@ export default {
         'imageHeight',
         'imageWidth',
         'points',
-        'lines'
+        'lines',
+        'curves'
     ],
+    components:{
+        QuadCurve
+    },
     data () {
         return{
             image: null,
