@@ -55,6 +55,20 @@
             </v-flex>
         </v-layout>
         <v-flex>
+            <div v-if="points.length > 0">
+                <div> 
+                    X, Y
+                </div>
+                <div 
+                    v-for="(coord, index) in points"
+                    :key="index"
+                >
+                {{coord.x}},{{coord.y}}
+                </div>
+
+            </div>
+        </v-flex>
+        <v-flex>
             <div v-if="startPointSubmitted">
                 <label>Next X</label>
                 <input
@@ -83,7 +97,7 @@
             :imageSrc='field' 
             :imageHeight="fieldHeight" 
             :imageWidth="fieldWidth"
-            :configPoint="configPoint"
+            :points="points"
             :lines="lines"
         >
         </DrawLinesOnAPicture>
@@ -105,13 +119,8 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
           startPointSubmitted: false,
           startX:0,
           startY:0,
-          configPoint:{
-                x: this.startX,
-                y: this.startY,
-                width: 10,
-                height: 10,
-                fill: "red"
-          },
+          startingPoint:null,
+          points: [],
           lines: [],
           nextX: 0,
           nextY:  0
@@ -120,17 +129,20 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
     },
     methods:{
         submitStartPosition : function() {
-          this.configPoint = {
+          this.startingPoint = {
                 x: parseInt(this.startX),
                 y: parseInt(this.startY),
                 width: 10,
                 height: 10,
                 fill: "red"
           };
+            this.points = [this.startingPoint]
           this.startPointSubmitted = true;
         },
         clearStartPosition : function() {
-            this.startPointSubmitted = false ;  
+            this.startPointSubmitted = false ; 
+            this.lines = [];
+            this.points = []; 
         },
         addLines : function(){
             var lineXStart = 0;
@@ -139,12 +151,23 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
                 lineXStart = this.startX,
                 lineYStart = this.startY
             }
+            else{
+                lineXStart = this.points[this.points.length - 1].x ;
+                lineYStart = this.points[this.points.length - 1].y ;
+            }
             this.lines.push(
             {
                 x: 0,
                 y: 0,
                 points: [lineXStart,lineYStart,this.nextX, this.nextY],
                 stroke: 'black'
+            });
+            this.points.push({
+                x: this.nextX,
+                y: this.nextY,
+                width: 10,
+                height: 10,
+                fill: "red"
             })
         }
     },
