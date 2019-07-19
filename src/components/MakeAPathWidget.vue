@@ -55,12 +55,12 @@
             </v-flex>
         </v-layout>
         <v-flex>
-            <div v-if="points.length > 0">
+            <div v-if="travelPoints.length > 0">
                 <div> 
                     X, Y
                 </div>
                 <div 
-                    v-for="(coord, index) in points"
+                    v-for="(coord, index) in travelPoints"
                     :key="index"
                 >
                 {{coord.x}},{{coord.y}}
@@ -92,6 +92,7 @@
                 >
                     <v-icon>redo</v-icon>
                 </v-btn>
+            <v-flex xs 5 v-if="curveIt">
                 <label
                     v-if="curveIt"
                 >
@@ -114,6 +115,7 @@
                     min=0
                     v-model="curveY"
                 >
+            </v-flex>
                 <v-btn 
                     v-on:click="addLines()"
                     flat
@@ -159,7 +161,8 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
           nextY:  0,
           curveX: 0,
           curveY: 0,
-          curveIt: false
+          curveIt: false,
+          travelPoints: []
 
       }
     },
@@ -179,6 +182,7 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
             this.startPointSubmitted = false ; 
             this.lines = [];
             this.points = []; 
+            this.curves = [];
         },
         addLines : function(){
             var lineXStart = 0;
@@ -186,6 +190,10 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
             if(this.lines.length === 0 && this.curves.length === 0){
                 lineXStart = parseInt(this.startX),
                 lineYStart = parseInt(this.startY)
+                this.travelPoints.push({
+                    x: lineXStart,
+                    y:lineYStart
+                })
             }
             else{
                 lineXStart = this.points[this.points.length - 1].x ;
@@ -223,6 +231,10 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
                 width: 10,
                 height: 10,
                 fill: "red"
+            })
+            this.travelPoints.push({
+                x: parseInt(this.nextX),
+                y: parseInt(this.nextY)
             })
             this.curveIt = false;            
         }
