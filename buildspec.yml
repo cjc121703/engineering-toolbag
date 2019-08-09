@@ -4,7 +4,8 @@ phases:
   install:
     commands:
       - printenv
-      - npm install -g @vue-cli
+      - rm -rf node_modules
+      - npm install
   build:
     commands:
       - npm run build -prod
