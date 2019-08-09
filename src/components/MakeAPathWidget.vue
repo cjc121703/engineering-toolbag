@@ -133,6 +133,8 @@
             :points="points"
             :lines="lines"
             :curves="curves"
+            :arcs="arcs"
+            @clicked="onImageClicked"
         >
         </DrawLinesOnAPicture>
     </v-card>
@@ -157,6 +159,7 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
           points: [],
           lines: [],
           curves: [],
+          arcs: [],
           nextX: 0,
           nextY:  0,
           curveX: 0,
@@ -183,6 +186,7 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
             this.lines = [];
             this.points = []; 
             this.curves = [];
+            this.arcs = [];
         },
         addLines : function(){
             var lineXStart = 0;
@@ -215,6 +219,16 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
                     height: 10,
                     fill: "purple"
                 })
+                this.arcs.push({
+                    x: lineXStart - 70,
+                    y: lineYStart,
+                    innerRadius:70,
+                    outerRadius:70,
+                    angle:70,
+                    fill: 'yellow',
+                    stroke: 'black',
+                    strokeWidth: 4
+                })
             }
             else{
                 this.lines.push(
@@ -237,10 +251,27 @@ import DrawLinesOnAPicture from "@/components/DrawLinesOnAPicture"
                 y: parseInt(this.nextY)
             })
             this.curveIt = false;            
-        }
+        },
+        onImageClicked(mousePosition) {
+            if(!this.startPointSubmitted){
+                this.startX = mousePosition.x;
+                this.startY = mousePosition.y;
+                this.startingPoint = {
+                    x: parseInt(this.startX),
+                    y: parseInt(this.startY),
+                    width: 10,
+                    height: 10,
+                    fill: "red"
+                };
+                this.points = [this.startingPoint]
+            }
+            else{
+                this.nextX = mousePosition.x;
+                this.nextY = mousePosition.y;
+            }
+        }      
     },
-    created() {
-    }
+
   }
 </script>
 <style>

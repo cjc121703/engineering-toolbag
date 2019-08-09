@@ -38,22 +38,37 @@
         <v-flex xs6 text-xs-center offset-lg3>
         <MakeAPath>
         </MakeAPath>
+        <pack-chart
+            :tweetData = loadData
+        />
         </v-flex>
     </v-container>
 </template>
 <script>
 import MakeAPath from "@/components/MakeAPathWidget"
+import PackChart from "@/components/Chart"
+import * as d3 from "d3";
 
   export default {
     components: {
-        MakeAPath
+        MakeAPath,
+        PackChart
     },
     data () {
       return {
-
+          loadData: []
       }
     },
+    mounted(){
+        console.log("App Loaded");
+        this.fetchData();
+    },
     methods:{
+        async fetchData() {
+            let data = await d3.json("./tweets.json");
+            this.loadData = data;
+            console.log("data loaded");
+        }
     },
     created() {
     }

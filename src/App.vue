@@ -1,7 +1,6 @@
 <template>
   <v-layout>
     <home/>
-    <happy-dog-page-error/>
   </v-layout>
 </template>
 

@@ -1,8 +1,10 @@
 <template>
     <div>
-        <v-stage :config="configKonva">
+        <v-stage ref="imgToDrawOn" :config="configKonva">
             <v-layer>
-                <v-image :config="{
+                <v-image 
+                    @click="clickedTheImage"
+                    :config="{
                         image: image,
                         width:imageWidth,
                         height:imageHeight
@@ -29,6 +31,15 @@
                         curve.startX
                     </quad-curve>
                 </div>
+                <div
+                    v-for="(arc, index) in arcs"
+                    :key="index"
+                >
+                    <v-arc
+                        :config="arc"
+                    >
+                    </v-arc>
+                </div>
             </v-layer>
         </v-stage>
     </div>
@@ -44,7 +55,8 @@ export default {
         'imageWidth',
         'points',
         'lines',
-        'curves'
+        'curves',
+        'arcs'
     ],
     components:{
         QuadCurve
@@ -66,6 +78,13 @@ export default {
             // set image only when it is loaded
             this.image = image;
         };
+    },
+    methods:{
+        clickedTheImage(event) {
+            const mousePos = this.$refs.imgToDrawOn.getStage().getPointerPosition();
+            console.log('x:' +mousePos.x +' ,y:' + mousePos.y);
+            this.$emit('clicked', mousePos);
+        }
     }
 }
 </script>
