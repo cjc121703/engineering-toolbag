@@ -9,6 +9,3 @@ phases:
   build:
     commands:
       - npm run build -prod
-  post_build:
-    commands:
-      - aws --region us-east-1 s3 sync ./dist/ s3://engineeringtoolbag.com/ --acl=public-read --delete
